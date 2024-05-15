@@ -1,0 +1,104 @@
+<html>
+<head>
+    <title>Receipt - Shutter Collections</title>
+    <link rel="icon" type="image/x-icon" href="SCIcon.png">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .receipt-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding-top: 50px;
+        }
+        .receipt-table {
+            width: 80%;
+            max-width: 1000px;
+            border-collapse: collapse;
+            background-color: #FFA235;
+        }
+        .receipt-table th, .receipt-table td {
+            border: 1px solid #000000;
+            padding: 8px;
+            text-align: center;
+        }
+        .receipt-table th {
+            background-color: #FFA235;
+        }
+        .product-image {
+            width: 100px;
+            height: auto;
+            object-fit: cover;
+        }
+        #total-price-row th {
+            background-color: #FFA235;
+            text-align: right;
+        }
+        #total-price-row td {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        function loadReceipt() {
+            const customerName = localStorage.getItem('customerName');
+            document.getElementById('customer-name').textContent = customerName ? customerName : 'Customer';
+
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartContainer = document.getElementById('receipt-items');
+            cartContainer.innerHTML = '';
+            let totalPrice = 0;
+
+            cart.forEach(item => {
+                totalPrice += item.price * item.quantity;
+                cartContainer.innerHTML += `
+                    <tr>
+                        <td><img src="${item.image}" alt="${item.product}" class="product-image"></td>
+                        <td>${item.product}</td>
+                        <td>${item.details}</td>
+                        <td>₱${item.price}</td>
+                        <td>${item.quantity}</td>
+                        <td>₱${item.price * item.quantity}</td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('total-price').textContent = `₱${totalPrice}`;
+        }
+    </script>
+</head>
+<body onload="loadReceipt()">
+    <img id="topfilm" src="AboutFilm.jpg">
+    <div class="button-container">
+        <a class="index" href="index.html">Home</a>
+        <a class="button" href="AboutUs.html">About Us</a>
+        <a class="button1" href="ContactUs.html">Contact Us</a>
+        <a class="button2" href="Homepage.html">Products</a>
+        <a class="type">Receipt</a>
+    </div>
+    <h1>Receipt for <span id="customer-name"></span></h1>
+    <div class="receipt-container">
+        <table class="receipt-table">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Details</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody id="receipt-items">
+            </tbody>
+            <tfoot>
+                <tr id="total-price-row">
+                    <th colspan="5">Total Price</th>
+                    <td id="total-price"></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</body>
+</html>
